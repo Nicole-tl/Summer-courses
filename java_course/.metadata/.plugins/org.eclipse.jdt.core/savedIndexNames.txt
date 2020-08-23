@@ -1,0 +1,3 @@
+INDEX VERSION 1.131+/Users/entl/Documents/Summer courses/java_course/.metadata/.plugins/org.eclipse.jdt.core
+3507706839.index
+1277319819.index
