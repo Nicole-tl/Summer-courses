@@ -412,16 +412,3 @@ bool PersonLista:: finnsPerson(const string& namn){
   }
   return finns;
 }
-
-// --------------------------------------
-// Funktionsdefinitioner
-
-
-
-
-
-
-
-
-
-//

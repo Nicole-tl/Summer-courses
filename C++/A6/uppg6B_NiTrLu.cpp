@@ -1,3 +1,30 @@
+/*
+================================================================================
+Datorer och programmering, DoP, 10 hsp, termin/år: sommar-20
+
+Inlämningsuppgift nr 6b
+
+Namn: Nicole Tran Luu
+
+Personummer: 960728-7225
+
+Fyll i (alt. stryk det som INTE är relevant) av nedanstående:
+
+Den fil som jag lämnar in går att kompilera och
+programmet fungerar för alla de testdata som finns för uppgiften: Ja
+     Om Nej, beskriv vilka testdata som ger problem:  __________________
+
+Jag har använt kompilator/editor (namn/version): Terminal's (in mac) gcc as complicator
+
+Jag har använt följande dator (t.ex. PC, Mac, Annat): Mac
+      med operativsystemet (t.ex. WindowsXP, Windows7,...) : macOs Catelina
+
+Jag har arbetat ungefär 8 dagar med denna uppgift.
+================================================================================
+*/
+// Slut på kommentar
+
+
 #include <string> //
 #include <cctype>
 #include <iostream> //
@@ -66,14 +93,12 @@ class PersonLista
 
  public:
    PersonLista();
-   PersonLista(const PersonLista &p); // Copy constructor
    ~PersonLista();  // Destructor
    void laggTillEn( Person pny );
    void skrivUtOchFixa();
    double summaSkyldig();
    double summaBetalat();
    bool finnsPerson(const string& namn);
-  //  ...eventuellt div. annat...
  };
 
  // Klass - Transaktionslista
@@ -86,8 +111,6 @@ class PersonLista
   public:
     TransaktionsLista();
     ~TransaktionsLista();
-    TransaktionsLista(const TransaktionsLista &t);
-    TransaktionsLista& operator=(const TransaktionsLista &t);
     void laesin( istream & is );
     void skrivut( ostream & os );
     void laggTill( Transaktion & t );
@@ -97,6 +120,10 @@ class PersonLista
     PersonLista FixaPersoner();
     int haemta_antalTrans();
   };
+
+// -------------------------------------------------------
+// funktionsdeklarationer
+void menu(TransaktionsLista nyTLista, int ind);
 
 // -------------------------------------------------------
 
@@ -199,14 +226,14 @@ Transaktion:: Transaktion()
 // Delete Konstructor
 Transaktion:: ~Transaktion()
 {
-  cout << "Nu körs destructor för Transaktion" << endl;
+  //cout << "Nu körs destructor för Transaktion" << endl;
   delete[] kompisar;
   kompisar = 0;
 }
 
 // Copy constructor
 Transaktion::Transaktion(const Transaktion & t) {
-  cout << "Nu körs copy constructor för Transaktion" << endl;
+  //cout << "Nu körs copy constructor för Transaktion" << endl;
   delete[] kompisar;
   datum = t.datum;
   typ = t.typ;
@@ -222,7 +249,7 @@ Transaktion::Transaktion(const Transaktion & t) {
 // Tilldelningsoperatorn
 Transaktion& Transaktion::operator=( const Transaktion& t)
 {
-  cout << "Nu körs copy assign operator för Transaktion" << endl;
+  //cout << "Nu körs copy assign operator för Transaktion" << endl;
   if (this != &t)
     {
       delete[] kompisar;
@@ -305,31 +332,6 @@ TransaktionsLista:: ~TransaktionsLista() {
   cout << "Körning av ~TransaktionsLista" << endl;
   delete[] trans;
   trans = 0;
-}
-
-TransaktionsLista:: TransaktionsLista(const TransaktionsLista &t) {
-  delete[] trans;
-  antalTrans = t.antalTrans;
-
-  trans = new Transaktion[antalTrans];
-
-  for (int i=0; i<antalTrans; i++) {
-    trans[i] = t.trans[i];
-  }
-
-}
-
-TransaktionsLista& TransaktionsLista::operator=(const TransaktionsLista& t)
-{
-  if(this != &t) {
-    delete[] trans;
-    antalTrans = t.antalTrans;
-    trans = new Transaktion[antalTrans];
-    for (int i=0; i<antalTrans; i++) {
-      trans[i] = t.trans[i];
-    }
-  }
-  return *this;
 }
 
 void TransaktionsLista:: laesin(istream & is) {
@@ -457,15 +459,6 @@ PersonLista:: PersonLista()
 : antal_pers(0)
 {}
 
-PersonLista::PersonLista(const PersonLista &p)
-:   antal_pers(p.antal_pers)
-{
-  pers = new Person[antal_pers];
-  for (int i = 0; i < antal_pers; i++) {
-    pers[i] = p.pers[i];
-  }
-}
-
 PersonLista:: ~PersonLista() {
   cout << "Nu körs destructor för PersonLista" << endl;
   delete []pers;
@@ -525,15 +518,173 @@ bool PersonLista:: finnsPerson(const string& namn){
   return finns;
 }
 
-// --------------------------------------
-// Funktionsdefinitioner
 
 
+/*
+================================================================================
+Här följer programkörningar för alla testdata:
+==============================================
+
+Nicoles-Air:A6 entl$ ./test
+Startar med att läsa från en fil.
+
+Välj i menyn nedan:
+0. Avsluta. Alla transaktioner sparas på fil.
+1. Läs in en transaktion från tangentbordet.
+2. Skriv ut information om alla transaktioner.
+3. Beräkna totala kostnaden.
+4. Hur mycket är en viss person skyldig?
+5. Hur mycket ligger en viss person ute med?
+6. Lista alla personer mm och FIXA!!!
+2
+Antal trans: 10
+050615  transp  Eva  6000  5    Bosse  Kristin  Paul  Torsten  Stina
+050721  mat  Eva  300  2    Bosse  Kristin
+050721  mat  Paul  400  2    Torsten  Stina
+050721  transp  Bosse  5000  3    Eva  Kristin  Paul
+050721  transp  Stina  5000  1    Torsten
+050722  boende  Kristin  200  1    Eva
+050722  mat  Eva  300  2    Kristin  Bosse
+050723  mat  Torsten  300  2    Paul  Stina
+050724  mat  Paul  200  1    Stina
+050725  transp  Eva  600  3    Bosse  Kristin  Paul
+
+Välj i menyn nedan:
+0. Avsluta. Alla transaktioner sparas på fil.
+1. Läs in en transaktion från tangentbordet.
+2. Skriv ut information om alla transaktioner.
+3. Beräkna totala kostnaden.
+4. Hur mycket är en viss person skyldig?
+5. Hur mycket ligger en viss person ute med?
+6. Lista alla personer mm och FIXA!!!
+3
+Totala kostnaden är: 18300kr.
+
+Välj i menyn nedan:
+0. Avsluta. Alla transaktioner sparas på fil.
+1. Läs in en transaktion från tangentbordet.
+2. Skriv ut information om alla transaktioner.
+3. Beräkna totala kostnaden.
+4. Hur mycket är en viss person skyldig?
+5. Hur mycket ligger en viss person ute med?
+6. Lista alla personer mm och FIXA!!!
+4
+Vad heter personen?/Vem?
+Eva
+Eva är skyldig 1350kr.
+
+Välj i menyn nedan:
+0. Avsluta. Alla transaktioner sparas på fil.
+1. Läs in en transaktion från tangentbordet.
+2. Skriv ut information om alla transaktioner.
+3. Beräkna totala kostnaden.
+4. Hur mycket är en viss person skyldig?
+5. Hur mycket ligger en viss person ute med?
+6. Lista alla personer mm och FIXA!!!
+5
+Vad heter personen?/Vem?
+Paul
+Paul ligger ute med 366.667kr.
+
+Välj i menyn nedan:
+0. Avsluta. Alla transaktioner sparas på fil.
+1. Läs in en transaktion från tangentbordet.
+2. Skriv ut information om alla transaktioner.
+3. Beräkna totala kostnaden.
+4. Hur mycket är en viss person skyldig?
+5. Hur mycket ligger en viss person ute med?
+6. Lista alla personer mm och FIXA!!!
+1
+010101 mat Eva 10 0
+
+Välj i menyn nedan:
+0. Avsluta. Alla transaktioner sparas på fil.
+1. Läs in en transaktion från tangentbordet.
+2. Skriv ut information om alla transaktioner.
+3. Beräkna totala kostnaden.
+4. Hur mycket är en viss person skyldig?
+5. Hur mycket ligger en viss person ute med?
+6. Lista alla personer mm och FIXA!!!
+2
+Antal trans: 11
+050615  transp  Eva  6000  5    Bosse  Kristin  Paul  Torsten  Stina
+050721  mat  Eva  300  2    Bosse  Kristin
+050721  mat  Paul  400  2    Torsten  Stina
+050721  transp  Bosse  5000  3    Eva  Kristin  Paul
+050721  transp  Stina  5000  1    Torsten
+050722  boende  Kristin  200  1    Eva
+050722  mat  Eva  300  2    Kristin  Bosse
+050723  mat  Torsten  300  2    Paul  Stina
+050724  mat  Paul  200  1    Stina
+050725  transp  Eva  600  3    Bosse  Kristin  Paul
+010101  mat  Eva  10  0
+
+Välj i menyn nedan:
+0. Avsluta. Alla transaktioner sparas på fil.
+1. Läs in en transaktion från tangentbordet.
+2. Skriv ut information om alla transaktioner.
+3. Beräkna totala kostnaden.
+4. Hur mycket är en viss person skyldig?
+5. Hur mycket ligger en viss person ute med?
+6. Lista alla personer mm och FIXA!!!
+6
+Nu skapar vi en personarray och reder ut det hela!
+Nu körs destructor för PersonLista
+Eva ligger ute med: 5850 och är skyldig: 1350. Skall lägga 4500 till potten.
+Paul ligger ute med: 366.667 och är skyldig: 2500. Skall ha 2133.33 från potten.
+Bosse ligger ute med: 3750 och är skyldig: 1350. Skall lägga 2400 till potten.
+Stina ligger ute med: 2500 och är skyldig: 1333.33. Skall lägga 1166.67 till potten.
+Kristin ligger ute med: 100 och är skyldig: 2600. Skall ha 2500 från potten.
+Torsten ligger ute med: 200 och är skyldig: 3633.33. Skall ha 3433.33 från potten.
+
+Välj i menyn nedan:
+0. Avsluta. Alla transaktioner sparas på fil.
+1. Läs in en transaktion från tangentbordet.
+2. Skriv ut information om alla transaktioner.
+3. Beräkna totala kostnaden.
+4. Hur mycket är en viss person skyldig?
+5. Hur mycket ligger en viss person ute med?
+6. Lista alla personer mm och FIXA!!!
+0
+
+================================================================================
+Här skriver du en kort rapport om uppgiften:
+- ett eller ett par stycken om vad uppgiften gick ut på,
+- vilka svårigheter som fanns,
+- vad du tyckte var besvärligt
+- och hur du löste problemen.
+
+Om det finns frågor att besvara i uppgiften ska det göras här.
+
+Uppgiften är snarlik uppgift 6A, det som är annorlunda är att vissa attribut är i form av
+pekare och då behövs destruktor, tilldelningsoperator och kopieringskonstruktor. Alla andra
+funktioner är orörda. Det krävde en definition av destruktor för klassen Transaktion,
+TransaktionsLista och PersonLista då en pekare ingick i dessa tre klasser. Klassen
+Transaktion krävde ytterligare en tilldelningsoperator,
+då den användes i laggTill-funktionen och behövdes destruktorn och "copy assign. operator" för
+att kopiera objekten för att skapandet av den dynamiska arrayn.
+
+Svårigheterna var att jag först hade väldigt svårt att förstå kopieringskonstruktor
+och tilldelningsoperator. Efter att ha läst på väldigt länge har jag börjat förstå lite
+mer varför man använder dem, dock var det fortfarande svårt att veta hur och var jag ska implementera dem.
+Med hjälp av diskutionen och exemplarna så jag har provat mig fram och skapat en kopieringskonstruktor
+och tilldelningsoperator för alla tre klasserna. Sedan hade jag en "cout" för att se vilka som användes
+och varför just bara dem som användes. Det visade sig att det bara var Transaktion då den i sig använder
+en pekare och som används i TransaktionLista, vilket är skillnaden mellan klassen Transaktion(samt TransaktionLista) och Person(samt PersonLista).
+
+Besvärligt var att jag hade en bugg i dator som sa att allt var fel hela tiden trots det hade fungerat köra innan.
+Nu har det löst sig utan att jag har gjort några större skillnader, men felsökningen på det tog också väldigt lång tid.
+Detta bidrog också till att min kod i 6B kanske skiljer sig till 6A lite då jag har ändrat på strukturen för ex. laggTill etc.
+Ett exempel är att jag har min switch-case inne i main code.
+
+När jag läste på Rule of Three så förstod jag det som att tre delar skall användas tillsammans, men varför verkar
+det som jag inte behöver kopieringskonstruktor för Transaktion eller överlag inget mer än destruktor för TransaktionLista och PersonLista?
+Samt varför ser jag att den alltid att destruktor för PersonLista körs alltid i slutet av programmet? Varför händer detta?
 
 
+Jag skulle gärna vilja se en exempellösning på uppgiften för att kunna få en bättre förståelse på hur man ska tänka
+när man gör en sådan uppgift i framtiden. Jag tyckte att det skulle varit enklare om uppgift 6 kunde
+delas upp i mindre delar, då det kändes som de förra uppgifterna var betydligt enklare än denna.
+Annars har jag tyckt att kursen har varit väldigt givandet och roligt, tack så mycket!
 
-
-
-
-
-//
+*/

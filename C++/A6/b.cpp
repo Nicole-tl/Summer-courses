@@ -27,6 +27,7 @@ class Transaktion
  public:
   Transaktion();
   ~Transaktion();
+  Transaktion(const Transaktion & t);
   Transaktion& operator=( const Transaktion& t);
   string haemta_namn();
   double haemta_belopp();
@@ -65,8 +66,8 @@ class PersonLista
 
  public:
    PersonLista();
-   PersonLista(const PersonLista &p);
-   ~PersonLista();
+   PersonLista(const PersonLista &p); // Copy constructor
+   ~PersonLista();  // Destructor
    void laggTillEn( Person pny );
    void skrivUtOchFixa();
    double summaSkyldig();
@@ -85,6 +86,8 @@ class PersonLista
   public:
     TransaktionsLista();
     ~TransaktionsLista();
+    TransaktionsLista(const TransaktionsLista &t);
+    TransaktionsLista& operator=(const TransaktionsLista &t);
     void laesin( istream & is );
     void skrivut( ostream & os );
     void laggTill( Transaktion & t );
@@ -196,28 +199,45 @@ Transaktion:: Transaktion()
 // Delete Konstructor
 Transaktion:: ~Transaktion()
 {
+  cout << "Nu körs destructor för Transaktion" << endl;
   delete[] kompisar;
   kompisar = 0;
 }
 
-  // Tilldelningsoperatorn
-  Transaktion& Transaktion::operator=( const Transaktion& t)
-  {
-    if (this != &t)
-      {
-        delete[] kompisar;
-        datum = t.datum;
-        typ = t.typ;
-        namn = t.namn;
-        belopp = t.belopp;
-        ant_kompisar = t.ant_kompisar;
-        kompisar = new string[ant_kompisar];
-        for (int i=0; i < ant_kompisar; i++) {
-          kompisar[i] = t.kompisar[i];
-        }
-      }
-    return *this;
+// Copy constructor
+Transaktion::Transaktion(const Transaktion & t) {
+  cout << "Nu körs copy constructor för Transaktion" << endl;
+  delete[] kompisar;
+  datum = t.datum;
+  typ = t.typ;
+  namn = t.namn;
+  belopp = t.belopp;
+  ant_kompisar = t.ant_kompisar;
+  kompisar = new string[ant_kompisar];
+  for (int i=0; i < ant_kompisar; i++) {
+    kompisar[i] = t.kompisar[i];
   }
+}
+
+// Tilldelningsoperatorn
+Transaktion& Transaktion::operator=( const Transaktion& t)
+{
+  cout << "Nu körs copy assign operator för Transaktion" << endl;
+  if (this != &t)
+    {
+      delete[] kompisar;
+      datum = t.datum;
+      typ = t.typ;
+      namn = t.namn;
+      belopp = t.belopp;
+      ant_kompisar = t.ant_kompisar;
+      kompisar = new string[ant_kompisar];
+      for (int i=0; i < ant_kompisar; i++) {
+        kompisar[i] = t.kompisar[i];
+      }
+    }
+  return *this;
+}
 
 // Selektorer för klassen Transaktion
 string Transaktion::haemta_namn() {
@@ -285,6 +305,31 @@ TransaktionsLista:: ~TransaktionsLista() {
   cout << "Körning av ~TransaktionsLista" << endl;
   delete[] trans;
   trans = 0;
+}
+
+TransaktionsLista:: TransaktionsLista(const TransaktionsLista &t) {
+  delete[] trans;
+  antalTrans = t.antalTrans;
+
+  trans = new Transaktion[antalTrans];
+
+  for (int i=0; i<antalTrans; i++) {
+    trans[i] = t.trans[i];
+  }
+
+}
+
+TransaktionsLista& TransaktionsLista::operator=(const TransaktionsLista& t)
+{
+  if(this != &t) {
+    delete[] trans;
+    antalTrans = t.antalTrans;
+    trans = new Transaktion[antalTrans];
+    for (int i=0; i<antalTrans; i++) {
+      trans[i] = t.trans[i];
+    }
+  }
+  return *this;
 }
 
 void TransaktionsLista:: laesin(istream & is) {
@@ -412,19 +457,20 @@ PersonLista:: PersonLista()
 : antal_pers(0)
 {}
 
-PersonLista::PersonLista(const PersonLista &p)
+/*PersonLista::PersonLista(const PersonLista &p)
+:   antal_pers(p.antal_pers)
 {
-  antal_pers = p.antal_pers;
-  delete[] pers;
   pers = new Person[antal_pers];
   for (int i = 0; i < antal_pers; i++) {
     pers[i] = p.pers[i];
   }
-}
+}*/
 
 PersonLista:: ~PersonLista() {
+  cout << "Nu körs destructor för PersonLista" << endl;
   delete []pers;
 }
+
 
 void PersonLista:: laggTillEn(Person pny) {
   Person *tempPers = 0;
